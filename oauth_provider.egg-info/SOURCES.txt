@@ -3,6 +3,7 @@
 AUTHORS
 LICENSE
 requirements.txt
+setup.cfg
 setup.py
 examples/__init__.py
 examples/provider/__init__.py
@@ -25,5 +26,19 @@ oauth_provider.egg-info/SOURCES.txt
 oauth_provider.egg-info/dependency_links.txt
 oauth_provider.egg-info/not-zip-safe
 oauth_provider.egg-info/top_level.txt
+oauth_provider/oauth_provider/__init__.py
+oauth_provider/oauth_provider/admin.py
+oauth_provider/oauth_provider/consts.py
+oauth_provider/oauth_provider/decorators.py
+oauth_provider/oauth_provider/forms.py
+oauth_provider/oauth_provider/managers.py
+oauth_provider/oauth_provider/models.py
+oauth_provider/oauth_provider/stores.py
+oauth_provider/oauth_provider/tests.py
+oauth_provider/oauth_provider/urls.py
+oauth_provider/oauth_provider/utils.py
+oauth_provider/oauth_provider/views.py
+oauth_provider/oauth_provider/store/__init__.py
+oauth_provider/oauth_provider/store/db.py
 oauth_provider/store/__init__.py
 oauth_provider/store/db.py
