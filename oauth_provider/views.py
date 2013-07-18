@@ -5,11 +5,10 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
 from django.shortcuts import render_to_response
-from django.template import RequestContext
+from django.template import RequestContext, loader
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.translation import ugettext as _
 from django.core.urlresolvers import get_callable
-from django.views.generic.simple import direct_to_template
 
 from decorators import oauth_required
 from forms import AuthorizeRequestTokenForm
@@ -159,10 +158,12 @@ def fake_authorize_view(request, token, callback, params):
 
 @login_required
 def default_authorize_view(request, token, callback, params, form_class=AuthorizeRequestTokenForm):
-    return direct_to_template(request, 'oauth_provider/authorize.html', {
+    c = RequestContext(request, {
         'form': form_class(initial={'oauth_token': token.key}),
         'consumer': token.consumer,
     })
+    t = loader.get_template('oauth_provider.authorize.html')
+    return HttpResponse(t.render(c))
 
 def fake_callback_view(request, **args):
     """
