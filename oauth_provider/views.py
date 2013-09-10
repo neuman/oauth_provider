@@ -1,3 +1,5 @@
+import logging
+
 from urllib import urlencode
 
 import oauth2 as oauth
@@ -34,9 +36,11 @@ def request_token(request):
     try:
         consumer = store.get_consumer(request, oauth_request, oauth_request['oauth_consumer_key'])
     except InvalidConsumerError:
+        logging.info('Oauth error: invalid consumer: %d' % oauth_request['oauth_consumer_key'])
         return HttpResponseBadRequest('Invalid Consumer.')
 
     if not verify_oauth_request(request, oauth_request, consumer):
+        logging.info('Oauth error: could not verify request')
         return HttpResponseBadRequest('Could not verify OAuth request.')
 
     try:
@@ -62,6 +66,7 @@ def user_authorization(request, form_class=AuthorizeRequestTokenForm):
     try:
         request_token = store.get_request_token(request, oauth_request, request.REQUEST['oauth_token'])
     except InvalidTokenError:
+        logging.info('Oauth error: could not authorize user %s with token %s' % (request.user, request.REQUEST['oauth_token']))
         return HttpResponseBadRequest('Invalid request token.')
 
     consumer = store.get_consumer_for_request_token(request, oauth_request, request_token)
