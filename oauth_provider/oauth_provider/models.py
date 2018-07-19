@@ -3,6 +3,7 @@ import urllib
 import urlparse
 from time import time
 import oauth2 as oauth
+from django.contrib.auth import get_user_model
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -12,7 +13,8 @@ from consts import KEY_SIZE, SECRET_SIZE, CONSUMER_KEY_SIZE, CONSUMER_STATES,\
                    PENDING, VERIFIER_SIZE, MAX_URL_LENGTH, OUT_OF_BAND
 from utils import check_valid_callback
 
-generate_random = User.objects.make_random_password
+#generate_random = User.objects.make_random_password
+generate_random = get_user_model().objects.make_random_password
 
 class Nonce(models.Model):
     token_key = models.CharField(max_length=KEY_SIZE)
@@ -42,7 +44,7 @@ class Consumer(models.Model):
     secret = models.CharField(max_length=SECRET_SIZE, blank=True)
 
     status = models.SmallIntegerField(choices=CONSUMER_STATES, default=PENDING)
-    user = models.ForeignKey(User, null=True, blank=True)
+    user = models.ForeignKey(get_user_model(), null=True, blank=True)
 
     objects = ConsumerManager()
         
@@ -70,7 +72,7 @@ class Token(models.Model):
     timestamp = models.IntegerField(default=long(time()))
     is_approved = models.BooleanField(default=False)
     
-    user = models.ForeignKey(User, null=True, blank=True, related_name='tokens')
+    user = models.ForeignKey(get_user_model(), null=True, blank=True, related_name='tokens')
     consumer = models.ForeignKey(Consumer)
     
     ## OAuth 1.0a stuff
